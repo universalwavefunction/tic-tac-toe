@@ -1,0 +1,22 @@
+.game {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#gameboard {
+  display: grid;
+  width: 600px;
+  height: 600px;
+  background-color:  #DAF7A6 ;
+  padding: 15px;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+
+}
+
+.boardSquare {
+  background-color: #FFFFF0;
+  border: .01em solid #1e90ff;
+}
