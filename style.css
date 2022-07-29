@@ -13,10 +13,13 @@
   padding: 15px;
   grid-template-rows: repeat(3, 1fr);
   grid-template-columns: repeat(3, 1fr);
-
 }
 
 .boardSquare {
   background-color: #FFFFF0;
-  border: .01em solid #1e90ff;
+  border: .001em solid #1e90ff;
+  font: bold 150px sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

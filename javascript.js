@@ -13,17 +13,18 @@ function newGame() {
   for (let i = 0; i < 9; i++) {
     let boardSquare = document.createElement('div');
     board.appendChild(boardSquare).className = "boardSquare";
+    boardPieces.append(boardSquare);
+    boardSquare.addEventListener("click", () => {
+      if (!boardSquare.innerHTML) {
+        boardSquare.innerHTML = "X";
+      }
+    })
   };
 };
 
-const player = {
-  name: "player",
-  marker: "X"
-}
+//start game (pvp and pvc options), empties board, restarts
+//player 1 moves (event listener for click), square removed from array
+//then computer moves (selects random from array of unchosen squares)
 
-const computer = {
-  name: "computer",
-  marker: "O"
-}
 
 newGame();
