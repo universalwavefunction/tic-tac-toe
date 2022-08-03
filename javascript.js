@@ -11,27 +11,36 @@ const gameBoard = (function() {
 
 const player1 = () => {
   let moved = false;
-  const blah = () => {
+  const move = count => {
+    boardPieces[count].innerHTML = "X";
+    boardPieces.splice[count, 1];
+    moved = true;
+    endmove()
+  };
+  const makemove = () => {
     const squares = document.querySelectorAll('.boardSquare')
     squares.forEach(square => {
-      square.addEventListener("click", () => {
-      if (!square.innerHTML) {
-        square.innerHTML = "X"}})})
-  };
-
+      if (!square.innerHTML && !moved) {
+        let count = boardPieces.indexOf(square);
+        square.addEventListener("click", function(){
+          move(count)});
+        console.log(count, moved, boardPieces.length)}})}
+  const endmove = () => {
+    const squares = document.querySelectorAll('.boardSquare')
+    squares.forEach(square => {
+      let count = boardPieces.indexOf(square);
+      square.removeEventListener("click", function(){
+        move(count)});
+    })};
   const listener = () => {
     for (let i = 0; i < boardPieces.length; i++) {
-      const move = () => {
-        boardPieces[i].innerHTML = "X";
-        boardPieces.splice[i, 1];
-        moved = true;
-        console.log(boardPieces.length, !moved)
-        return moved;
-      };
-      if (!(boardPieces[i].innerHTML) && !moved) {
-        boardPieces[i].addEventListener("click", move)
-      }}}
-  return {listener}}
+      if (!boardPieces[i].innerHTML && !moved) {
+        boardPieces[i].addEventListener("click", function(){
+          move(i)});
+          console.log(i, moved, boardPieces.length)}}}
+  return {makemove}};
+
+
 
 const computer = {
   move: function move() {
@@ -42,7 +51,7 @@ const computer = {
 };
 
 const player = player1()
-player.listener()
+player.makemove()
 computer.move()
 
 //start game (pvp and pvc options), empties board, restarts
