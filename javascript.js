@@ -16,6 +16,7 @@ const player1 = () => {
     boardPieces.splice[count, 1];
     moved = true;
     endmove()
+    console.log(count, moved, boardPieces.length)
   };
   const makemove = () => {
     const squares = document.querySelectorAll('.boardSquare')
@@ -24,7 +25,8 @@ const player1 = () => {
         let count = boardPieces.indexOf(square);
         square.addEventListener("click", function(){
           move(count)});
-        console.log(count, moved, boardPieces.length)}})}
+        }})}
+
   const endmove = () => {
     const squares = document.querySelectorAll('.boardSquare')
     squares.forEach(square => {
@@ -32,12 +34,6 @@ const player1 = () => {
       square.removeEventListener("click", function(){
         move(count)});
     })};
-  const listener = () => {
-    for (let i = 0; i < boardPieces.length; i++) {
-      if (!boardPieces[i].innerHTML && !moved) {
-        boardPieces[i].addEventListener("click", function(){
-          move(i)});
-          console.log(i, moved, boardPieces.length)}}}
   return {makemove}};
 
 
