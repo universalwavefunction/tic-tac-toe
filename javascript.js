@@ -10,30 +10,18 @@ const gameBoard = (function() {
 })();
 
 const player1 = () => {
+  const squares = document.querySelectorAll('.boardSquare')
   let moved = false;
-  const move = count => {
-    boardPieces[count].innerHTML = "X";
-    boardPieces.splice[count, 1];
-    moved = true;
-    endmove()
-    console.log(count, moved, boardPieces.length)
-  };
   const makemove = () => {
-    const squares = document.querySelectorAll('.boardSquare')
     squares.forEach(square => {
-      if (!square.innerHTML && !moved) {
-        let count = boardPieces.indexOf(square);
-        square.addEventListener("click", function(){
-          move(count)});
-        }})}
+        square.addEventListener("click", () => {
+        if (!square.innerHTML && !moved) {
+          square.innerHTML = "X"
+          moved = true
+          boardPieces.splice(square, 1);
+          }});
+        })}
 
-  const endmove = () => {
-    const squares = document.querySelectorAll('.boardSquare')
-    squares.forEach(square => {
-      let count = boardPieces.indexOf(square);
-      square.removeEventListener("click", function(){
-        move(count)});
-    })};
   return {makemove}};
 
 
