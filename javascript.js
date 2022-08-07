@@ -9,57 +9,61 @@ const gameBoard = (function() {
   };
 })();
 
-const player1 = () => {
+const game = () => {
   const squares = document.querySelectorAll('.boardSquare')
-  let moved = false;
-  const makemove = () => {
-    return new Promise(resolve => {
-    squares.forEach(square => {
-        square.addEventListener("click", () => {
-        if (!square.innerHTML && !moved) {
-          square.innerHTML = "X"
-          moved = true
-          boardPieces.splice(square, 1);
-          resolve()
-          }});
-        })})}
-  return {makemove, moved}};
 
-const computer = () => {
-  const move = () => {
+  const computer = () => {
     var randomnum = Math.floor(Math.random() * boardPieces.length)
-      if (!boardPieces[randomnum].innerHTML) {
-        boardPieces[randomnum].innerHTML = "O"}
-        boardPieces.splice(randomnum, 1)
+    boardPieces[randomnum].innerHTML = "O"
+    boardPieces.splice(randomnum, 1)
   }
-  return {move}
-};
 
-const player = player1()
-const computer1 = computer()
+  const playervsplayer = () => {
+    let player1moved = false;
+    let player2moved = true;
+    squares.forEach(square => {
+      square.addEventListener("click", () => {
+      if (!square.innerHTML && !player1moved) {
+        square.innerHTML = "X"
+        player1moved = true;
+        player2moved = false;
+        //boardPieces.splice(square, 1);
+      }
+      else if (!square.innerHTML && !player2moved) {
+        square.innerHTML = "O"
+        player1moved = false;
+        player2moved = true;
+      }
+      });
+    })}
 
-async function newGame() {
-  let playermoved = true;
-  let computermoved = false;
-  moves = 0;
-  while (moves < 9) {
-    if (!computermoved) {
-      computer1.move();
-      computermoved = true
-      playermoved = false
-      moves++
-      console.log(moves,playermoved,computermoved)
-    }
-    if (!playermoved) {
-      await player.makemove();
-      playermoved = true
-      computermoved = false
-      moves++
-      console.log(moves,playermoved,computermoved)
-    }
-}};
+  const playervscomputer = () => {
+    let player1moved = false;
+    let computermoved = true;
+    squares.forEach(square => {
+      square.addEventListener("click", () => {
+      if (!square.innerHTML && !player1moved) {
+        square.innerHTML = "X"
+        player1moved = true;
+        computermoved = false;
+        boardPieces.splice(boardPieces.indexOf(square), 1);
+      }
+      else if (!computermoved) {
+        computer()
+        player1moved = false;
+        computermoved = true;
+      }
+      });
+    })
+  }
+  return{game, playervsplayer, playervscomputer}};
 
-newGame()
-//start game (pvp and pvc options), empties board, restarts
-//game playing functionality, player moves, then computer's turn,
-//then player's turn, etc until game is over
+game1 = game()
+game1.playervscomputer()
+
+
+//start game buttons (pvp and pvc options), empties board, restarts
+//game playing functionality, player moves with one piece other
+//player moves with other, checks for winner
+//player v computer, player click to move computer random move
+//from list of available moves (remove move from list)
