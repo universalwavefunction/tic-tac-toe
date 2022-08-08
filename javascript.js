@@ -1,26 +1,74 @@
 let boardPieces = [];
 let board = document.querySelector('#gameboard');
+let gametype = document.querySelector(".startbuttons");
 
-const gameBoard = (function() {
+
+const startGame = () => {
+  gametype.style.display = "flex"
+  document.getElementById('start').style.display = "none"
+}
+
+
+const resetBoard = () => {
+  const squares = document.querySelectorAll('.boardSquare')
+  squares.forEach(square => {board.removeChild(square)});
+  board.style.display="grid";
+  board.style.width="600px";
+  board.style.height="600px";
+  board.style.background="#DAF7A6";
+  board.style.border=".01em solid #7aa7c7";
+  board.style.padding="15px"
+}
+
+const startGamePVP = () => {
+  gameBoard()
+  pvpgame = game()
+  pvpgame.playervsplayer()
+}
+
+const startGamePVC = () => {
+  gameBoard()
+  pvcgame = game()
+  pvcgame.playervscomputer()
+}
+
+const gameBoard = () => {
+  boardPieces = [];
+  resetBoard()
   for (let i = 0; i < 9; i++) {
     let boardSquare = document.createElement('div');
     board.appendChild(boardSquare).className = "boardSquare";
     boardPieces.push(boardSquare);
   };
-})();
+};
 
 const game = () => {
   const squares = document.querySelectorAll('.boardSquare')
+  let player1moved = false
+  let computermoved = true
+  let player2moved = true
 
-  const computer = () => {
-    var randomnum = Math.floor(Math.random() * boardPieces.length)
-    boardPieces[randomnum].innerHTML = "O"
-    boardPieces.splice(randomnum, 1)
+  const computermove = () => {
+    if (0 < boardPieces.length) {
+      var randomnum = Math.floor(Math.random() * boardPieces.length)
+      boardPieces[randomnum].innerHTML = "O"
+      boardPieces.splice(randomnum, 1)
+      player1moved = false
+      computermoved = true
+  }}
+
+  const playermove = square => {
+    if (!square.innerHTML && !player1moved) {
+      square.innerHTML = "X"
+      player1moved = true;
+      computermoved = false;
+      boardPieces.splice(boardPieces.indexOf(square), 1);
+      computermove()
+    }
   }
 
+
   const playervsplayer = () => {
-    let player1moved = false;
-    let player2moved = true;
     squares.forEach(square => {
       square.addEventListener("click", () => {
       if (!square.innerHTML && !player1moved) {
@@ -38,32 +86,16 @@ const game = () => {
     })}
 
   const playervscomputer = () => {
-    let player1moved = false;
-    let computermoved = true;
     squares.forEach(square => {
-      square.addEventListener("click", () => {
-      if (!square.innerHTML && !player1moved) {
-        square.innerHTML = "X"
-        player1moved = true;
-        computermoved = false;
-        boardPieces.splice(boardPieces.indexOf(square), 1);
-      }
-      else if (!computermoved) {
-        computer()
-        player1moved = false;
-        computermoved = true;
-      }
-      });
+      square.addEventListener("click", function() {
+        playermove(square)
+      })
     })
   }
   return{game, playervsplayer, playervscomputer}};
 
-game1 = game()
-game1.playervscomputer()
-
-
-//start game buttons (pvp and pvc options), empties board, restarts
-//game playing functionality, player moves with one piece other
-//player moves with other, checks for winner
-//player v computer, player click to move computer random move
-//from list of available moves (remove move from list)
+/*
+To do:
+- check for winner
+- make min max AI for computer
+*/
