@@ -21,7 +21,7 @@ h1 {
 }
 
 .boardSquare {
-  background-color: #FFFFF0;
+  background-color: #e1ecf4;
   border: .001em solid #7aa7c7;
   font: bold 150px sans-serif;
   display: flex;

@@ -15,7 +15,7 @@ const resetBoard = () => {
   board.style.display="grid";
   board.style.width="600px";
   board.style.height="600px";
-  board.style.background="#DAF7A6";
+  board.style.background="#2c5777";
   board.style.border=".01em solid #7aa7c7";
   board.style.padding="15px"
 }
@@ -75,7 +75,6 @@ const game = () => {
         square.innerHTML = "X"
         player1moved = true;
         player2moved = false;
-        //boardPieces.splice(square, 1);
       }
       else if (!square.innerHTML && !player2moved) {
         square.innerHTML = "O"
@@ -96,6 +95,7 @@ const game = () => {
 
 /*
 To do:
-- check for winner
+- check for winner: after every move check for 3 in a row
+of X or O (vertical, horizontal, and diagonal)
 - make min max AI for computer
 */
