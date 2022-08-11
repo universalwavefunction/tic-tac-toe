@@ -7,8 +7,6 @@ let winningMoves = [
 ]
 let player1moves = []
 let player2moves = []
-let computermoves = []
-
 
 const startGame = () => {
   gametype.style.display = "flex"
@@ -30,7 +28,6 @@ const resetBoard = () => {
   boardPieces = [];
   player1moves = []
   player2moves = []
-  computermoves = []
 }
 
 const startGamePVP = () => {
@@ -53,73 +50,69 @@ const gameBoard = () => {
 };
 
 const game = () => {
-  let player1moved = false
-  let computermoved = true
-  let player2moved = true
   let gameover = document.getElementById("gameover")
 
-  const computermove = () => {
-    if (0 < boardPieces.length) {
-      var randomnum = Math.floor(Math.random() * boardPieces.length)
-      boardPieces[randomnum][0].innerHTML = "O"
-      computermoves.push(boardPieces[randomnum][1])
-      boardPieces.splice(randomnum, 1)
-      player1moved = false
-      computermoved = true
+  const playerFactory = (name, piece, computer, turn, moves) => {
+
+    const checkWin = () => {
       for (move in winningMoves) {
-        if (winningMoves[move].every(num => computermoves.includes(num))){
-          player1moved=true;
-          gameover.innerHTML = "Game over! Welcome our new AI overlords."
-          return(console.log("i for one welcome our new AI overlords"))
+        if (winningMoves[move].every(num => moves.includes(num))){
+          gameover.innerHTML = "Game over! " + name + " wins!"
+          return;//how to break the loop/stop listeners?
         }
         else if (boardPieces.length == 0) {
           gameover.innerHTML = "It's a tie."
-          return
-        }}
-  }}
+          return;
+        }
+    }}
 
-  const playermove = square => {
-    if (!square[0].innerHTML && !player1moved) {
-      square[0].innerHTML = "X"
-      player1moved = true;
-      computermoved = false;
-      player1moves.push(square[1])
+    const playermove = square => {
+      square[0].innerHTML = piece;
+      turn = false; //why doesn't this work?
+      moves.push(square[1]);
       boardPieces.splice(boardPieces.indexOf(square), 1);
-      for (move in winningMoves) {
-        if (winningMoves[move].every(num => player1moves.includes(num))){
-          gameover.innerHTML = "Game over! Humans continue their reign."
-          return(console.log("humans continue their reign"))
-        }
-        else if (boardPieces.length == 0) {
-          gameover.innerHTML = "It's a tie."
-          return
-        }
-    }
-      computermove()
-    }
-  }
+      checkWin();
+      }
 
+    const computermove = () => {
+      if (0 < boardPieces.length) {
+        name = "Computer"
+        var randomnum = Math.floor(Math.random() * boardPieces.length);
+        boardPieces[randomnum][0].innerHTML = piece;
+        moves.push(boardPieces[randomnum][1]);
+        boardPieces.splice(randomnum, 1);
+        turn = false;
+        checkWin()
+    }}
+
+    return {name, piece, computer, turn, moves, checkWin, playermove, computermove}
+  };
+
+  const player1 = playerFactory('Player 1', 'X', false, true, player1moves) //anyway to add player2.turn here?
+  const player2 = playerFactory('Player 2', 'O', false, false, player2moves)
 
   const playervsplayer = () => {
     boardPieces.forEach(square => {
       square[0].addEventListener("click", () => {
-      if (!square[0].innerHTML && !player1moved) {
-        square[0].innerHTML = "X"
-        player1moved = true;
-        player2moved = false;
+      if (!square[0].innerHTML && player1.turn) {
+        player1.playermove(square)
+        player1.turn = false;
+        player2.turn = true;
       }
-      else if (!square[0].innerHTML && !player2moved) {
-        square[0].innerHTML = "O"
-        player1moved = false;
-        player2moved = true;
+      else if (!square[0].innerHTML && player2.turn) {
+        player2.playermove(square)
+        player2.turn = false;
+        player1.turn = true;
       }
       });
     })}
 
   const playervscomputer = () => {
+    player2.computer = true;
     boardPieces.forEach(square => {
     square[0].addEventListener("click", function() {
-        playermove(square)
+        player1.playermove(square)
+        player2.computermove()
       })
     })
   }
@@ -127,7 +120,6 @@ const game = () => {
 
 /*
 To do:
-- check for winner: after every move check for 3 in a row
-of X or O (vertical, horizontal, and diagonal)
+- stop moves when someone wins
 - make min max AI for computer
 */
