@@ -57,7 +57,7 @@ const game = () => {
     const checkWin = () => {
       for (move in winningMoves) {
         if (winningMoves[move].every(num => moves.includes(num))){
-          gameover.innerHTML = "Game over! " + name + " wins!"
+          gameover.innerHTML = "Game over: " + name + " wins!"
           return;//how to break the loop/stop listeners?
         }
         else if (boardPieces.length == 0) {
@@ -75,6 +75,17 @@ const game = () => {
       }
 
     const computermove = () => {
+      if (0 < boardPieces.length) {
+        name = "Computer"
+        var randomnum = Math.floor(Math.random() * boardPieces.length);
+        boardPieces[randomnum][0].innerHTML = piece;
+        moves.push(boardPieces[randomnum][1]);
+        boardPieces.splice(randomnum, 1);
+        turn = false;
+        checkWin()
+    }}
+
+    const computermoveMinMax = () => {
       if (0 < boardPieces.length) {
         name = "Computer"
         var randomnum = Math.floor(Math.random() * boardPieces.length);
@@ -103,19 +114,18 @@ const game = () => {
         player2.playermove(square)
         player2.turn = false;
         player1.turn = true;
-      }
-      });
+      }});
     })}
 
   const playervscomputer = () => {
     player2.computer = true;
     boardPieces.forEach(square => {
     square[0].addEventListener("click", function() {
+      if (!square[0].innerHTML) {
         player1.playermove(square)
         player2.computermove()
-      })
-    })
-  }
+      }})
+    })}
   return{game, playervsplayer, playervscomputer}};
 
 /*
